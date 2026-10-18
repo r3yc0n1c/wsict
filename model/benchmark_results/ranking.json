@@ -1,0 +1,137 @@
+{
+  "ranking_timestamp_utc": "2026-10-18T13:39:28.999589+00:00",
+  "benchmark_files": [
+    "benchmark_results/benchmark_20261018_184932.json",
+    "benchmark_results/benchmark_20261018_190056.json",
+    "benchmark_results/benchmark_20261018_190211.json"
+  ],
+  "settings": {
+    "weights": {
+      "request_success_rate": 0.1,
+      "valid_json_rate": 0.1,
+      "schema_compliance_rate": 0.1,
+      "correct_count_rate": 0.15,
+      "all_names_unique_batch_rate": 0.1,
+      "length_compliance_rate": 0.1,
+      "keyword_relevance_rate": 0.05,
+      "pronounceability_rate": 0.1,
+      "pairwise_diversity": 0.1,
+      "speed_score": 0.1
+    },
+    "minimum_gates": {
+      "request_success_rate": 0.95,
+      "valid_json_rate": 0.95,
+      "schema_compliance_rate": 0.95,
+      "correct_count_rate": 0.9,
+      "length_compliance_rate": 0.9
+    },
+    "target_latency_seconds": 3.0
+  },
+  "winner": null,
+  "models": [
+    {
+      "model": "Qwen/Qwen2.5-1.5B-Instruct-GGUF:Q4_K_M",
+      "runs": 10,
+      "successful_requests": 10,
+      "request_success_rate": 1.0,
+      "valid_json_rate": 1.0,
+      "schema_compliance_rate": 1.0,
+      "correct_count_rate": 1.0,
+      "all_names_unique_batch_rate": 0.8,
+      "length_compliance_rate": 0.85,
+      "keyword_relevance_rate": 0.0,
+      "pronounceability_rate": 0.85,
+      "pairwise_diversity": 0.9888888888888889,
+      "mean_latency_seconds": 3.6257590218003317,
+      "p95_latency_seconds": 4.130836370549696,
+      "mean_generation_tokens_per_second": 18.537440286471472,
+      "speed_score": 0.8274129587659089,
+      "eligible": false,
+      "eligibility_failures": [
+        "length_compliance_rate=85.0% (minimum 90%)"
+      ],
+      "score": 88.16301847654798,
+      "source_runs": [
+        {
+          "file": "benchmark_results/benchmark_20261018_184932.json",
+          "timestamp": "2026-10-18T13:18:49.758581+00:00",
+          "strategy": "BalancedStrategy",
+          "count": 10,
+          "temperature": 0.7
+        }
+      ],
+      "rank": 1
+    },
+    {
+      "model": "bartowski/Llama-3.2-1B-Instruct-GGUF:Q4_K_M",
+      "runs": 10,
+      "successful_requests": 10,
+      "request_success_rate": 1.0,
+      "valid_json_rate": 0.9,
+      "schema_compliance_rate": 0.8,
+      "correct_count_rate": 0.7,
+      "all_names_unique_batch_rate": 0.7,
+      "length_compliance_rate": 0.9131313131313131,
+      "keyword_relevance_rate": 0.010101010101010102,
+      "pronounceability_rate": 0.9888888888888889,
+      "pairwise_diversity": 0.9925925925925926,
+      "mean_latency_seconds": 2.9386960480005655,
+      "p95_latency_seconds": 3.464229641001293,
+      "mean_generation_tokens_per_second": 21.632871859034797,
+      "speed_score": 1.0,
+      "eligible": false,
+      "eligibility_failures": [
+        "valid_json_rate=90.0% (minimum 95%)",
+        "schema_compliance_rate=80.0% (minimum 95%)",
+        "correct_count_rate=70.0% (minimum 90%)"
+      ],
+      "score": 83.496632996633,
+      "source_runs": [
+        {
+          "file": "benchmark_results/benchmark_20261018_190211.json",
+          "timestamp": "2026-10-18T13:31:36.027860+00:00",
+          "strategy": "BalancedStrategy",
+          "count": 10,
+          "temperature": 0.7
+        }
+      ],
+      "rank": 2
+    },
+    {
+      "model": "HuggingFaceTB/SmolLM2-1.7B-Instruct-GGUF:Q4_K_M",
+      "runs": 10,
+      "successful_requests": 10,
+      "request_success_rate": 1.0,
+      "valid_json_rate": 0.9,
+      "schema_compliance_rate": 0.9,
+      "correct_count_rate": 0.7,
+      "all_names_unique_batch_rate": 0.4,
+      "length_compliance_rate": 0.5898989898989899,
+      "keyword_relevance_rate": 0.07777777777777778,
+      "pronounceability_rate": 0.9232323232323233,
+      "pairwise_diversity": 0.978675645342312,
+      "mean_latency_seconds": 3.181981197999994,
+      "p95_latency_seconds": 3.7050594822499985,
+      "mean_generation_tokens_per_second": 15.767935831208206,
+      "speed_score": 0.9428088393123201,
+      "eligible": false,
+      "eligibility_failures": [
+        "valid_json_rate=90.0% (minimum 95%)",
+        "schema_compliance_rate=90.0% (minimum 95%)",
+        "correct_count_rate=70.0% (minimum 90%)",
+        "length_compliance_rate=59.0% (minimum 90%)"
+      ],
+      "score": 77.23504686674835,
+      "source_runs": [
+        {
+          "file": "benchmark_results/benchmark_20261018_190056.json",
+          "timestamp": "2026-10-18T13:30:17.880498+00:00",
+          "strategy": "BalancedStrategy",
+          "count": 10,
+          "temperature": 0.7
+        }
+      ],
+      "rank": 3
+    }
+  ]
+}

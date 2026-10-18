@@ -1,0 +1,211 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-ibm-plex-mono), ui-monospace, monospace;
+}
+
+:root {
+  color-scheme: dark;
+  font-family: var(--font-sans);
+  background: #0d0d0d;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background: #0d0d0d;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+button,
+textarea {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: wait;
+}
+
+::selection {
+  color: #0d0d0d;
+  background: #c6ff3d;
+}
+
+.field-label {
+  display: block;
+  margin-bottom: 10px;
+  color: #8a8a8a;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+.template-button {
+  position: relative;
+  display: flex;
+  min-height: 70px;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  border: 1px solid rgb(255 255 255 / 0.08);
+  border-radius: 10px;
+  background: #0e0e0e;
+  padding: 12px 14px;
+  text-align: left;
+  transition:
+    border-color 160ms ease,
+    background 160ms ease;
+}
+
+.template-button:hover {
+  border-color: rgb(255 255 255 / 0.16);
+  background: #111;
+}
+
+.template-button--selected {
+  border-color: rgb(198 255 61 / 0.55);
+  background: rgb(198 255 61 / 0.035);
+  box-shadow: inset 0 0 0 1px rgb(198 255 61 / 0.04);
+}
+
+.template-button--selected::after {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 5px;
+  height: 5px;
+  border-radius: 999px;
+  background: #c6ff3d;
+  content: "";
+}
+
+.count-button {
+  display: grid;
+  width: 40px;
+  height: 30px;
+  place-items: center;
+  border: 0;
+  border-radius: 5px;
+  background: transparent;
+  color: #717171;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  transition:
+    color 150ms ease,
+    background 150ms ease;
+}
+
+.count-button:hover {
+  color: white;
+}
+
+.count-button--selected {
+  background: #242424;
+  color: #f3f3f3;
+  box-shadow: 0 1px 3px rgb(0 0 0 / 0.3);
+}
+
+.primary-button {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  border: 1px solid #c6ff3d;
+  border-radius: 9px;
+  background: #c6ff3d;
+  padding: 0 17px;
+  color: #0b0b0b;
+  font-size: 13px;
+  font-weight: 600;
+  transition:
+    background 150ms ease,
+    border-color 150ms ease,
+    transform 150ms ease;
+}
+
+.primary-button:hover {
+  border-color: #d2ff64;
+  background: #d2ff64;
+  transform: translateY(-1px);
+}
+
+.primary-button:active {
+  transform: translateY(0);
+}
+
+.copy-button {
+  display: flex;
+  min-width: 34px;
+  height: 34px;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border: 1px solid transparent;
+  border-radius: 7px;
+  background: transparent;
+  color: #676767;
+  transition:
+    border-color 150ms ease,
+    color 150ms ease,
+    background 150ms ease;
+}
+
+.copy-button:hover {
+  border-color: rgb(255 255 255 / 0.08);
+  background: #1c1c1c;
+  color: #ddd;
+}
+
+.copy-button--done {
+  color: #c6ff3d;
+}
+
+.loading-spinner {
+  width: 14px;
+  height: 14px;
+  border: 1.5px solid rgb(13 13 13 / 0.28);
+  border-top-color: #0d0d0d;
+  border-radius: 999px;
+  animation: spin 700ms linear infinite;
+}
+
+button:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid #c6ff3d;
+  outline-offset: 2px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
