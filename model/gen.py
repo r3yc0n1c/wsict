@@ -1,16 +1,25 @@
 import json
 import sys
 import traceback
+from datetime import UTC, datetime
+from pathlib import Path
 
 import requests
 from keywords import extract_keywords
 from templates_v2 import *
+
+OUTPUT_DIR = Path("product_names")
+OUTPUT_DIR.mkdir(exist_ok=True)
 
 LLM_API = "http://127.0.0.1:8080/v1/chat/completions"
 HEADERS = {"Content-Type": "application/json"}
 
 MODEL = "Qwen/Qwen2.5-3B-Instruct-GGUF:Q4_K_M"
 TEMPERATURE = 0.7
+STRATEGY_NAMES = [x.STRATEGY_NAME for x in STRATEGIES] + ["all"]
+STRATEGIES_MENU = (
+    "\n".join([f"[{i}] " + s for i, s in enumerate(STRATEGY_NAMES)]) + "\n[?]> "
+)
 
 
 def get_payload(count, product_description, keywords, strategy):
@@ -47,6 +56,7 @@ def get_payload(count, product_description, keywords, strategy):
                 ),
             },
         ],
+        "stream": False,
     }
 
     return payload
@@ -78,23 +88,62 @@ def get_names(count, product_description, keywords, strategy):
 
 
 if __name__ == "__main__":
-    description = input("Enter your product description: ")
-    count = int(input("Total names: "))
+    results = {
+        "metadata": {
+            "timestamp_utc": datetime.now(UTC).isoformat(),
+            "endpoint": LLM_API,
+            "model": MODEL,
+            "temperature": TEMPERATURE,
+        },
+        "product_data": {}
+    }
 
     try:
+        description = input("Enter your product description: ")
+        count = int(input("Total names: "))
+        i = int(input(STRATEGIES_MENU))
+
+        results["product_data"]["description"] = description
+        results["product_data"]["count"] = count
+        results["product_data"]["strategies"] = {}
+
         keywords = extract_keywords(description)
-        print(json.dumps(keywords, indent=2, ensure_ascii=False))
 
         if len(keywords) <= 0:
             sys.exit("Fix keyword gen")
 
-        for STRATEGY in STRATEGIES:
-            s = STRATEGY()
+        print("KEYWORDS:")
+        print(json.dumps(keywords, indent=2, ensure_ascii=False))
+
+        results["product_data"]["keywords"] = keywords
+
+        # strategy = 'all'
+        if i == len(STRATEGY_NAMES) - 1:
+            for STRATEGY in STRATEGIES:
+                s = STRATEGY()
+                names = get_names(count, description, keywords, s)
+                print("=" * 16)
+                print(s.STRATEGY_NAME)
+                print("=" * 16)
+                print(names)
+                results["product_data"]["strategies"][s.STRATEGY_NAME] = names
+        else:
+            s = STRATEGIES[i]()
+
+            print("=" * 16)
+            print(s.STRATEGY_NAME)
+            print("=" * 16)
+
             names = get_names(count, description, keywords, s)
-            print("=" * 16)
-            print(s.__class__.__name__)
-            print("=" * 16)
             print(names)
+            results["product_data"]["strategies"][s.STRATEGY_NAME] = names
+
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        json_path = OUTPUT_DIR / f"product_{timestamp}.json"
+        json_path.write_text(
+            json.dumps(results, indent=2, ensure_ascii=False),
+            encoding="utf-8",
+        )
 
     except requests.RequestException as exc:
         print(f"LLM API request failed: {exc}")

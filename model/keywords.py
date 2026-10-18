@@ -5,7 +5,7 @@ import requests
 
 LLM_API = "http://127.0.0.1:8080/v1/chat/completions"
 MODEL = "Qwen/Qwen2.5-3B-Instruct-GGUF:Q4_K_M"
-TEMPERATURE = 0.3
+TEMPERATURE = 0.7
 
 SYSTEM_PROMPT = """
 You are a product naming research assistant.
@@ -34,7 +34,7 @@ schema = {
             "keywords": {
                 "type": "array",
                 "items": {"type": "string"},
-                "description": "A list of unique keywords related to the product description.",
+                "description": "A list of unique 8-15 keywords related to the product description.",
             }
         },
         "required": ["keywords"],
@@ -56,13 +56,11 @@ def extract_keywords(product_description: str) -> list[str]:
             {
                 "role": "user",
                 "content": (
-                    "Extract keywords from this product description:\n\n"
+                    "Extract 8-15 keywords from this product description:\n\n"
                     f"{product_description.strip()}"
                 ),
             },
         ],
-        "max_tokens": 256,
-        "stream": False,
     }
 
     response = requests.post(
@@ -73,7 +71,7 @@ def extract_keywords(product_description: str) -> list[str]:
     response.raise_for_status()
 
     content = response.json()["choices"][0]["message"]["content"]
-    print("Raw LLM response:", repr(content))
+    # print("Raw LLM response:", repr(content))
     keywords = json.loads(content)["keywords"]
 
     if not isinstance(keywords, list):
