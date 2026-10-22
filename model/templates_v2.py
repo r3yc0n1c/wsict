@@ -240,6 +240,37 @@ class BalancedStrategy(Strategy):
     )
 
 
+class MythologicalStrategy(Strategy):
+    """
+    Names inspired by mythology, legendary figures, and ancient stories.
+    Focus: powerful, memorable names with symbolic meaning.
+    """
+
+    STRATEGY_NAME = "mythological"
+    STRATEGY = (
+        "Generate distinctive brand names drawn from actual world "
+        "mythology and folklore, including figures, beings, creatures, "
+        "artifacts, and culturally significant concepts. Analyze the "
+        "product description first, identifying its purpose, core "
+        "capabilities, audience, and desired identity. Select names "
+        "whose authentic stories, roles, attributes, or symbolism "
+        "meaningfully relate to that context. Relevance is mandatory: "
+        "do not include a name merely because it is famous, powerful, "
+        "or sounds appealing. Explore diverse traditions and lesser-known "
+        "references; avoid overusing popular deities, alternate names "
+        "for the same figure, and unrelated mythological name lists. "
+        "Preserve recognizable, authentic names. Exclude ordinary "
+        "English words, fabricated mythological-sounding names, and "
+        "weak or forced associations. Prioritize semantic relevance, "
+        "distinctiveness, pronunciation, and brandability over quantity."
+        "Each name should pass:"
+        "1. Mythological authenticity: Is this a real, traceable reference?"
+        "Product relevance: Is there a meaningful connection to the product's purpose?"
+        "Brandability: Is it memorable, pronounceable, and distinctive?"
+        "Redundancy: Does it duplicate another candidate's identity or naming pattern?"
+    )
+
+
 STRATEGIES = [
     BalancedStrategy,
     SemanticStrategy,
@@ -249,5 +280,6 @@ STRATEGIES = [
     LinguisticTwistStrategy,
     DeveloperSyntaxStrategy,
     AbstractEvocativeStrategy,
-    ForgeMintStrategy
+    ForgeMintStrategy,
+    MythologicalStrategy,
 ]

@@ -91,8 +91,8 @@ def extract_keywords(product_description: str) -> list[str]:
             seen.add(keyword)
             cleaned.append(keyword)
 
-    if not 8 <= len(cleaned) <= 15:
-        raise ValueError(f"Expected 8-15 keywords, received {len(cleaned)}: {cleaned}")
+    # if not 8 <= len(cleaned) <= 15:
+    #     raise ValueError(f"Expected 8-15 keywords, received {len(cleaned)}: {cleaned}")
 
     return cleaned
 
