@@ -5,6 +5,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 
 import requests
+
 from keywords import extract_keywords
 from templates_v2 import *
 
@@ -14,7 +15,8 @@ OUTPUT_DIR.mkdir(exist_ok=True)
 LLM_API = "http://127.0.0.1:8080/v1/chat/completions"
 HEADERS = {"Content-Type": "application/json"}
 
-MODEL = "Qwen/Qwen2.5-3B-Instruct-GGUF:Q4_K_M"
+# MODEL = "Qwen/Qwen2.5-3B-Instruct-GGUF:Q4_K_M"
+MODEL = "unsloth/Qwen3.5-4B-GGUF:Q4_K_M"
 TEMPERATURE = 0.7
 STRATEGY_NAMES = [x.STRATEGY_NAME for x in STRATEGIES] + ["all"]
 STRATEGIES_MENU = (
@@ -95,7 +97,7 @@ if __name__ == "__main__":
             "model": MODEL,
             "temperature": TEMPERATURE,
         },
-        "product_data": {}
+        "product_data": {},
     }
 
     try:
