@@ -29,9 +29,9 @@ export async function POST(req: Request) {
     // Cap total names to a maximum of 20
     const safeCount = Math.min(20, Math.max(1, Number(count) || 5));
 
-    const apiUrl = process.env.LLM_API_BASE_URL;
-    const apiKey = process.env.LLM_API_KEY;
-    const model = process.env.LLM_MODEL;
+    const apiUrl = process.env.LLM_API_BASE_URL!;
+    const apiKey = process.env.LLM_API_KEY!;
+    const model = process.env.LLM_MODEL!;
 
     const kwString = Array.isArray(keywords) ? keywords.join(", ") : String(keywords || "");
     const headers: Record<string, string> = { "Content-Type": "application/json" };
