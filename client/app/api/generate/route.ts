@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { STRATEGIES } from "@/lib/templates";
+import { isRateLimited, getClientIp } from "@/lib/ratelimit";
 
 const jsonSchema = {
   name: "product_names",
@@ -20,6 +21,18 @@ const jsonSchema = {
 
 export async function POST(req: Request) {
   try {
+    const ip = getClientIp(req);
+    const { limited, resetInSec } = isRateLimited(ip, 5, 60_000);
+    if (limited) {
+      return NextResponse.json(
+        { error: `Too many generation requests. Please wait ${resetInSec}s.` },
+        {
+          status: 429,
+          headers: { "Retry-After": resetInSec.toString() },
+        },
+      );
+    }
+
     const { description, keywords, count = 5, strategy = "balanced" } = await req.json();
 
     if (!description || typeof description !== "string" || !description.trim()) {
@@ -29,7 +42,7 @@ export async function POST(req: Request) {
     // Cap total names to a maximum of 20
     const safeCount = Math.min(20, Math.max(1, Number(count) || 5));
 
-    const apiUrl = process.env.LLM_API_BASE_URL!;
+    const apiUrl = process.env.LLM_API_BASE_URL! + "v1/chat/completions";
     const apiKey = process.env.LLM_API_KEY!;
     const model = process.env.LLM_MODEL!;
 
