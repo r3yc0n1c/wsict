@@ -1,10 +1,16 @@
 import json
+import os
 import traceback
 
 import requests
+from dotenv import load_env_file
+
+load_env_file()
 
 LLM_API = "http://127.0.0.1:8080/v1/chat/completions"
-MODEL = "Qwen/Qwen2.5-3B-Instruct-GGUF:Q4_K_M"
+MODEL = os.getenv("MODEL")
+API_KEY = os.getenv("API_KEY")
+HEADERS = {"Content-Type": "application/json", "Authorization": f"Bearer {API_KEY}"}
 TEMPERATURE = 0.7
 
 SYSTEM_PROMPT = """
@@ -66,6 +72,7 @@ def extract_keywords(product_description: str) -> list[str]:
     response = requests.post(
         LLM_API,
         json=payload,
+        headers=HEADERS,
         timeout=(5, 90),
     )
     response.raise_for_status()

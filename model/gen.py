@@ -1,22 +1,29 @@
 import json
+import os
 import sys
 import traceback
 from datetime import UTC, datetime
 from pathlib import Path
 
 import requests
-
+from dotenv import load_env_file
 from keywords import extract_keywords
 from templates_v2 import *
+
+load_env_file()
+
 
 OUTPUT_DIR = Path("product_names")
 OUTPUT_DIR.mkdir(exist_ok=True)
 
 LLM_API = "http://127.0.0.1:8080/v1/chat/completions"
-HEADERS = {"Content-Type": "application/json"}
+API_KEY = os.getenv("API_KEY")
+HEADERS = {"Content-Type": "application/json", "Authorization": f"Bearer {API_KEY}"}
 
 # MODEL = "Qwen/Qwen2.5-3B-Instruct-GGUF:Q4_K_M"
-MODEL = "unsloth/Qwen3.5-4B-GGUF:Q4_K_M"
+# MODEL = "unsloth/Qwen3.5-4B-GGUF:Q4_K_M"
+MODEL = os.getenv("MODEL")
+print(MODEL, API_KEY)
 TEMPERATURE = 0.7
 STRATEGY_NAMES = [x.STRATEGY_NAME for x in STRATEGIES] + ["all"]
 STRATEGIES_MENU = (
