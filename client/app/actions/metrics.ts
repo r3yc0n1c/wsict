@@ -97,3 +97,53 @@ export async function getMetrics(projectName: string = "wsict") {
     return { visitors: 0, total_generated_names: 0 };
   }
 }
+
+export async function checkLlmStatus(): Promise<{ online: boolean; model?: string }> {
+  try {
+    const rawUrl = process.env.LLM_API_BASE_URL!;
+    const apiKey = process.env.LLM_API_KEY!;
+    const model = process.env.LLM_MODEL!;
+
+    let healthUrl = `${rawUrl}/health`;
+    
+    const headers: Record<string, string> = {};
+    if (apiKey) headers["Authorization"] = `Bearer ${apiKey}`;
+    if (process.env.CF_ACCESS_CLIENT_ID) {
+      headers["CF-Access-Client-Id"] = process.env.CF_ACCESS_CLIENT_ID;
+      headers["CF-Access-Client-Secret"] = process.env.CF_ACCESS_CLIENT_SECRET || "";
+    }
+
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 2500);
+
+    try {
+      const res = await fetch(healthUrl, {
+        method: "GET",
+        headers,
+        signal: controller.signal,
+        cache: "no-store",
+      });
+      clearTimeout(timeout);
+      if (res.ok) {
+        return { online: true, model };
+      }
+    } catch {
+      // Fallback to checking models endpoint
+    }
+
+    const modelsUrl = rawUrl.replace(/\/chat\/completions\/?$/, "/models");
+    const controller2 = new AbortController();
+    const timeout2 = setTimeout(() => controller2.abort(), 2500);
+    const res2 = await fetch(modelsUrl, {
+      method: "GET",
+      headers,
+      signal: controller2.signal,
+      cache: "no-store",
+    });
+    clearTimeout(timeout2);
+
+    return { online: res2.ok, model };
+  } catch {
+    return { online: false };
+  }
+}

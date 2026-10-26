@@ -1,7 +1,12 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { getMetrics, incrementMetric, incrementMetricBy } from "./actions/metrics";
+import {
+  getMetrics,
+  incrementMetric,
+  incrementMetricBy,
+  checkLlmStatus,
+} from "./actions/metrics";
 import * as c from "@/lib/constant";
 import { STRATEGIES } from "@/lib/templates";
 
@@ -163,11 +168,22 @@ export function NameGenerator() {
   const [copied, setCopied] = useState<string | null>(null);
   const [visitorCount, setVisitorCount] = useState<number>(0);
   const [totalGenerated, setTotalGenerated] = useState<number>(0);
+  const [llmStatus, setLlmStatus] = useState<"checking" | "online" | "offline">("checking");
   const [error, setError] = useState("");
   const resultsRef = useRef<HTMLDivElement>(null);
   const selectRef = useRef<HTMLDivElement>(null);
 
+  const verifyLlm = () => {
+    setLlmStatus("checking");
+    checkLlmStatus().then((res) => {
+      setLlmStatus(res.online ? "online" : "offline");
+    });
+  };
+
   useEffect(() => {
+    // Check engine status once on page load
+    verifyLlm();
+
     // Fetch initial metrics and increment visitors once per session
     getMetrics("wsict").then((data) => {
       setVisitorCount(data.visitors || 0);
@@ -365,10 +381,29 @@ export function NameGenerator() {
       <header className="border-b border-white/[0.07]">
         <div className="mx-auto flex h-16 max-w-280 items-center justify-between px-5 sm:px-8">
           <Logo />
-          <div className="flex items-center gap-2 font-mono text-[11px] text-[#898989]">
-            <span className="size-1.5 rounded-full bg-[#c6ff3d] shadow-[0_0_0_3px_rgba(198,255,61,0.08)]" />
-            All systems operational
-          </div>
+          <button
+            type="button"
+            onClick={verifyLlm}
+            title="Click to recheck engine status"
+            className="flex items-center gap-2 font-mono text-[11px] text-[#898989] transition hover:text-[#ddd]"
+          >
+            {llmStatus === "checking" ? (
+              <>
+                <span className="size-1.5 rounded-full bg-amber-400 animate-pulse shadow-[0_0_0_3px_rgba(251,191,36,0.15)]" />
+                Checking status...
+              </>
+            ) : llmStatus === "online" ? (
+              <>
+                <span className="size-1.5 rounded-full bg-[#c6ff3d] shadow-[0_0_0_3px_rgba(198,255,61,0.12)]" />
+                Online
+              </>
+            ) : (
+              <>
+                <span className="size-1.5 rounded-full bg-[#ff5252] shadow-[0_0_0_3px_rgba(255,82,82,0.18)]" />
+                Offline
+              </>
+            )}
+          </button>
         </div>
       </header>
 
@@ -669,7 +704,7 @@ export function NameGenerator() {
                     <span className="loading-spinner" />
                     <p className="text-sm font-medium text-[#bdbdbd]">
                       {loadingStage === "keywords"
-                        ? "Generating keywords with LLM..."
+                        ? "Generating keywords with..."
                         : "Generating names..."}
                     </p>
                   </div>

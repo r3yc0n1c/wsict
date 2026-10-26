@@ -7,7 +7,7 @@ else
     exit 1
 fi
 
-echo "$MODEL | $API_KEY"
+# echo "$MODEL | $API_KEY"
 
 # llama-server -hf Qwen/Qwen2.5-1.5B-Instruct-GGUF:Q4_K_M \
 #   -c 4096 \
